@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-bold text-center mb-6">📈 Stock Analysis</h2>
+
+        <form method="GET" class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="symbol" class="block text-sm font-medium">Stock Symbol:</label>
+                    <input type="text" id="symbol" name="symbol" 
+                           value="{{ request.GET.symbol|default:'AAPL' }}" 
+                           class="w-full mt-1 p-2 border border-gray-700 rounded bg-gray-700 text-white" required>
+                </div>
+
+                <div>
+                    <label for="period" class="block text-sm font-medium">Duration:</label>
+                    <select id="period" name="period" class="w-full mt-1 p-2 border border-gray-700 rounded bg-gray-700 text-white">
+                        <option value="1mo" {% if request.GET.period == "1mo" %}selected{% endif %}>1 Month</option>
+                        <option value="3mo" {% if request.GET.period == "3mo" %}selected{% endif %}>3 Months</option>
+                        <option value="6mo" {% if request.GET.period == "6mo" %}selected{% endif %}>6 Months</option>
+                        <option value="1y" {% if request.GET.period == "1y" %}selected{% endif %}>1 Year</option>
+                        <option value="5y" {% if request.GET.period == "5y" %}selected{% endif %}>5 Years</option>
+                        <option value="max" {% if request.GET.period == "max" %}selected{% endif %}>Max</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="currency" class="block text-sm font-medium">Currency:</label>
+                    <select id="currency" name="currency" class="w-full mt-1 p-2 border border-gray-700 rounded bg-gray-700 text-white">
+                        <option value="USD" {% if request.GET.currency == "USD" %}selected{% endif %}>USD</option>
+                        <option value="INR" {% if request.GET.currency == "INR" %}selected{% endif %}>INR</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="graph_type" class="block text-sm font-medium">Graph Type:</label>
+                    <select id="graph_type" name="graph_type" class="w-full mt-1 p-2 border border-gray-700 rounded bg-gray-700 text-white">
+                        <option value="line" {% if request.GET.graph_type == "line" %}selected{% endif %}>Line</option>
+                        <option value="bar" {% if request.GET.graph_type == "bar" %}selected{% endif %}>Bar</option>
+                        <option value="candlestick" {% if request.GET.graph_type == "candlestick" %}selected{% endif %}>Candlestick</option>
+                    </select>
+                </div>
+
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Update Chart
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        {% if graph_html %}
+            <div class="mt-8 bg-gray-800 p-6 rounded-lg shadow-lg">
+                {{ graph_html|safe }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
